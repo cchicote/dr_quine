@@ -1,11 +1,14 @@
 YELLOW="\033[01;33m"
 GREEN="\033[01;32m"
 CYAN="\033[01;36m"
+GREY="\033[01;37m"
 NOCOLOR="\033[01;0m"
 
-NAME=Colleen
-SRC=Colleen.s
-OBJ=Colleen.o
+NAME=Sully
+TEST_DIRECTORY=out
+TEST_SCRIPT=evaluate.sh
+SRC=Sully.s
+OBJ=Sully.o
 
 CFLAGS=-f macho64
 LFLAGS=-macosx_version_min 10.8 -lSystem
@@ -25,7 +28,8 @@ $(NAME): $(OBJ)
 	@printf $(CYAN)
 	@printf "🔨 Linking $(NAME) 🔨\n"
 	@printf $(YELLOW)
-	ld $(OBJ) $(LFLAGS) -o $(NAME)
+	/bin/mkdir $(TEST_DIRECTORY)
+	ld $(OBJ) $(LFLAGS) -o $(TEST_DIRECTORY)/$(NAME)
 	@printf $(GREEN)
 	@printf "✅ $(NAME) linked! ✅\n\n"
 	@printf $(NOCOLOR)
@@ -35,7 +39,8 @@ clean:
 	@printf "🧹 Cleaning miscellaneous files 🧹\n"
 	@printf $(YELLOW)
 	/bin/rm -f $(OBJ)
-	/bin/rm -f Colleen_bis.s
+	/bin/rm -f $(TEST_SCRIPT)
+	/bin/rm -rf $(TEST_DIRECTORY)
 	/bin/rm -f diff
 	@printf $(GREEN)
 	@printf "✅ $(NAME) removed! ✅\n\n"
@@ -56,10 +61,14 @@ evaluate: re
 	@printf $(CYAN)
 	@printf "⏳ Executing tests on $(NAME) ⏳\n"
 	@printf $(YELLOW)
-	./$(NAME) > Colleen_bis.s
-	diff $(SRC) Colleen_bis.s > diff
-	cat -e diff
+	echo "cd $(TEST_DIRECTORY) ; ./$(NAME) ; rm -f Sully_*.o ; ls -la | grep $(NAME) | wc -l" > $(TEST_SCRIPT)
+	@chmod 766 $(TEST_SCRIPT)
+	@printf $(GREY)
+	- ./$(TEST_SCRIPT)
+	- diff $(SRC) $(TEST_DIRECTORY)/Sully_5.s
+	- diff $(SRC) $(TEST_DIRECTORY)/Sully_0.s
 	@printf $(GREEN)
+	@printf "\n"
 	@printf "✅ $(NAME) tests executed! ✅\n\n"
 	@printf $(NOCOLOR)
 

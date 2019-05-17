@@ -1,11 +1,13 @@
 YELLOW="\033[01;33m"
 GREEN="\033[01;32m"
 CYAN="\033[01;36m"
+GREY="\033[01;37m"
 NOCOLOR="\033[01;0m"
 
-NAME=Colleen
-SRC=Colleen.s
-OBJ=Colleen.o
+NAME=Grace
+KID=Grace_kid.s
+SRC=Grace.s
+OBJ=Grace.o
 
 CFLAGS=-f macho64
 LFLAGS=-macosx_version_min 10.8 -lSystem
@@ -35,7 +37,7 @@ clean:
 	@printf "🧹 Cleaning miscellaneous files 🧹\n"
 	@printf $(YELLOW)
 	/bin/rm -f $(OBJ)
-	/bin/rm -f Colleen_bis.s
+	/bin/rm -f $(KID)
 	/bin/rm -f diff
 	@printf $(GREEN)
 	@printf "✅ $(NAME) removed! ✅\n\n"
@@ -56,9 +58,11 @@ evaluate: re
 	@printf $(CYAN)
 	@printf "⏳ Executing tests on $(NAME) ⏳\n"
 	@printf $(YELLOW)
-	./$(NAME) > Colleen_bis.s
-	diff $(SRC) Colleen_bis.s > diff
+	- ./$(NAME)
+	- diff $(SRC) $(KID) > diff
 	cat -e diff
+	@printf $(GREY)
+	ls -la
 	@printf $(GREEN)
 	@printf "✅ $(NAME) tests executed! ✅\n\n"
 	@printf $(NOCOLOR)
