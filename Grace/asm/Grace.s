@@ -5,10 +5,11 @@
 ;
 
 %define MACH_SYSCALL(nb) 0x2000000 | nb
+%define PERMISSIONS 0644o
 
 section .rodata
 	filename: db "Grace_kid.s", 0
-	content: db "%6$cmacro PROGRAM 0%1$c%1$c%5$c%1$c%5$c%2$cCommentaire hors fonction%1$c%5$c%1$c%1$c%6$cdefine MACH_SYSCALL(nb) 0x2000000 | nb%1$c%1$csection .rodata%1$c%2$cfilename: db %3$cGrace_kid.s%3$c, 0%1$c%2$ccontent: db %3$c%4$s%3$c, 0%1$c%1$csection .text%1$c%2$cglobal start%1$c%2$cglobal _main%1$c%2$cextern _dprintf%1$c%1$cstart:%1$c%2$ccall _main%1$c%2$cret%1$c%1$c_main:%1$c%2$cpush rbp%1$c%2$cmov rbp, rsp%1$c%2$csub rsp, 16%1$c%1$c%2$clea rdi, [rel filename]%1$c%2$cmov rsi, 0x0001|0x0200%1$c%2$cmov rdx, 0644o%1$c%2$cmov rax, MACH_SYSCALL(0x5)%1$c%2$csyscall%1$c%1$c%2$ccmp rax, 0%1$c%2$cjl exit_process%1$c%1$c%2$cmov [rsp], rax%1$c%1$c%2$cmov rdi, rax%1$c%2$clea rsi, [rel content]%1$c%2$cmov rdx, 10%1$c%2$cmov rcx, 9%1$c%2$cmov r8, 34%1$c%2$clea r9, [rel content]%1$c%2$cpush 37%1$c%2$cpush 59%1$c%2$ccall _dprintf%1$c%1$c%2$cmov rdi, [rsp]%1$c%2$cmov rax, MACH_SYSCALL(0x6)%1$c%2$csyscall%1$c%1$c%2$cexit_process:%1$c%2$c%2$cmov rax, 0%1$c%2$c%2$cleave%1$c%2$c%2$cret%1$c%6$cendmacro%1$c%1$cPROGRAM%1$c", 0
+	content: db "%6$cmacro PROGRAM 0%1$c%1$c%5$c%1$c%5$c%2$cCommentaire hors fonction%1$c%5$c%1$c%1$c%6$cdefine MACH_SYSCALL(nb) 0x2000000 | nb%1$c%6$cdefine PERMISSIONS 0644o%1$c%1$csection .rodata%1$c%2$cfilename: db %3$cGrace_kid.s%3$c, 0%1$c%2$ccontent: db %3$c%4$s%3$c, 0%1$c%1$csection .text%1$c%2$cglobal start%1$c%2$cglobal _main%1$c%2$cextern _dprintf%1$c%1$cstart:%1$c%2$ccall _main%1$c%2$cret%1$c%1$c_main:%1$c%2$cpush rbp%1$c%2$cmov rbp, rsp%1$c%2$csub rsp, 16%1$c%1$c%2$clea rdi, [rel filename]%1$c%2$cmov rsi, 0x0001|0x0200%1$c%2$cmov rdx, PERMISSIONS%1$c%2$cmov rax, MACH_SYSCALL(0x5)%1$c%2$csyscall%1$c%1$c%2$ccmp rax, 0%1$c%2$cjl exit_process%1$c%1$c%2$cmov [rsp], rax%1$c%1$c%2$cmov rdi, rax%1$c%2$clea rsi, [rel content]%1$c%2$cmov rdx, 10%1$c%2$cmov rcx, 9%1$c%2$cmov r8, 34%1$c%2$clea r9, [rel content]%1$c%2$cpush 37%1$c%2$cpush 59%1$c%2$ccall _dprintf%1$c%1$c%2$cmov rdi, [rsp]%1$c%2$cmov rax, MACH_SYSCALL(0x6)%1$c%2$csyscall%1$c%1$c%2$cexit_process:%1$c%2$c%2$cmov rax, 0%1$c%2$c%2$cleave%1$c%2$c%2$cret%1$c%6$cendmacro%1$c%1$cPROGRAM%1$c", 0
 
 section .text
 	global start
@@ -26,7 +27,7 @@ _main:
 
 	lea rdi, [rel filename]
 	mov rsi, 0x0001|0x0200
-	mov rdx, 0644o
+	mov rdx, PERMISSIONS
 	mov rax, MACH_SYSCALL(0x5)
 	syscall
 
